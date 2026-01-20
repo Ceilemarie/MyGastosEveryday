@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnDatenTime: Button
     private lateinit var btnSend: Button
     private lateinit var Totalamount: TextView
-
     private lateinit var btnclear: Button
     private val calendar: Calendar = Calendar.getInstance()
     private lateinit var dbHelper: DatabaseHelper
@@ -45,15 +44,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         inputAmount = findViewById(R.id.inputAmount)
-        chooseExpense = findViewById(R.id.chooseExpense)
+        chooseExpense = findViewById(R.id.chooseExpense) //spinner
         listView = findViewById(R.id.listView)
         btnDatenTime = findViewById(R.id.btnDatenTime)
         btnSend = findViewById(R.id.btnSend)
         btnclear = findViewById(R.id.btnclear)
         Totalamount = findViewById(R.id.Totalamount)
 
-        dbHelper = DatabaseHelper(this)
+        dbHelper = DatabaseHelper(this) //database setup
 
+
+        //spinner
         val spinnerAdapter = ArrayAdapter.createFromResource(
             this,
             R.array.expenses,
@@ -98,25 +99,29 @@ class MainActivity : AppCompatActivity() {
         loadExpenses() // Refresh the list
     }
 
+
+    //add amount
     private fun addExpense() {
         val amount = inputAmount.text.toString().toDoubleOrNull()
         val category = chooseExpense.selectedItem.toString()
-        val date = btnDatenTime.text.toString()
+        val datentime = btnDatenTime.text.toString()
 
+
+        //if else
         if (amount == null) {
             Toast.makeText(this, "Please enter a valid amount", Toast.LENGTH_SHORT).show()
             return
         }
-        if (date == "Date") {
+        if (datentime == "Date") {
             Toast.makeText(this, "Please select a date and time", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val success = dbHelper.insertExpense(category, amount, date)
+        val success = dbHelper.insertExpense(category, amount, datentime)
         if (success) {
             Toast.makeText(this, "Expense added", Toast.LENGTH_SHORT).show()
             inputAmount.text.clear()
-            btnDatenTime.text = "Date"
+            btnDatenTime.text = "DatenTime"
             loadExpenses()
         } else {
             Toast.makeText(this, "Error adding expense", Toast.LENGTH_SHORT).show()
@@ -128,12 +133,14 @@ class MainActivity : AppCompatActivity() {
         expenseList.clear()
         var totalAmount = 0.0
 
+      //do while
+
         if (cursor.moveToFirst()) {
             do {
-                val category = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_CATEGORY))
-                val amount = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_AMOUNT))
-                val date = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COL_DATE))
-                expenseList.add("$category: $amount - $date")
+                val category = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.CATEGORY))
+                val amount = cursor.getDouble(cursor.getColumnIndexOrThrow(DatabaseHelper.AMOUNT))
+                val datentime = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.DATE))
+                expenseList.add("$category: $amount - $datentime")
                 totalAmount += amount
             } while (cursor.moveToNext())
         }
@@ -144,6 +151,8 @@ class MainActivity : AppCompatActivity() {
         Totalamount.text = String.format("%.2f", totalAmount)
     }
 
+
+    // date and time
     private fun showDatePicker() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
