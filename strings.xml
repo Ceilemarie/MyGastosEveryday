@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">impr</string>
+    <string name="app_title">MyGastosEveryday</string>
+    <string name="choose_your_expenses">Choose your Expenses:</string>
+    <string name="history_of_expenses">Hisotry of Expenses:</string>
+    <string name="input_amount">Input Amount</string>
+    <string name="amount">Amount:</string>
+    <string name="date">Date</string>
+    <string name="button">Button</string>
+
+
+    <!-- for spinner (choose ur expenses) -->
+    <string-array name="expenses">
+        <item>Food</item>
+        <item>Transport</item>
+        <item>Clothes</item>
+        <item>School stuff</item>
+    </string-array>
+</resources>
+
+
